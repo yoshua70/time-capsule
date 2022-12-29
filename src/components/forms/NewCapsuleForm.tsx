@@ -1,10 +1,10 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
-type Inputs = {
+interface IFormInputs {
   content: string;
-};
+}
 
 const schema = z.object({
   content: z.string(),
@@ -14,11 +14,10 @@ export const NewCapsuleForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(schema) });
+  } = useForm<IFormInputs>({ resolver: zodResolver(schema) });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit = (data: IFormInputs) => console.log(data);
 
   return (
     <form
@@ -27,6 +26,7 @@ export const NewCapsuleForm = () => {
     >
       <h1>New capsule</h1>
       <input {...register("content")} type="text" />
+      <p className="text-red-500">{errors.content?.message}</p>
       <button
         type="submit"
         className="bg-gray-300 px-4 py-2 font-bold transition-all duration-100 ease-in-out hover:bg-slate-200"
